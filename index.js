@@ -2,12 +2,15 @@ import express from "express"
 import {MongoClient} from "mongodb"
 import dotenv from "dotenv"
 import {pizzaRouter} from "./pizzas.js"
+import cors from "cors"
 
 dotenv.config()
 
 const app = express()
 
 const PORT = process.env.PORT
+
+app.use(cors())
 
 app.use(express.json())
 
