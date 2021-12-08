@@ -2,6 +2,7 @@ import express from "express"
 import {MongoClient} from "mongodb"
 import dotenv from "dotenv"
 import {pizzaRouter} from "./pizzas.js"
+import {authRouter} from "./auth.js"
 import cors from "cors"
 
 dotenv.config()
@@ -30,6 +31,7 @@ app.get("/", (request,response)=>{
 })
 
 app.use("/pizzas", pizzaRouter)
+app.use("/pizzas/auth", authRouter)
 
 app.listen(PORT, ()=>{
     console.log("app started at ", PORT)
