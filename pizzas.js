@@ -8,8 +8,8 @@ router
 .get(async(request, response)=>{
     const result = await getPizza()
     console.log(result)
-    const user = request.user
-    response.send({result, user})
+    // const user = request.user
+    response.send(result)
 })
 .post(async(request, response)=>{
     const data = request.body
