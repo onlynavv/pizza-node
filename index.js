@@ -31,7 +31,7 @@ app.get("/", (request,response)=>{
 })
 
 app.use("/pizzas", pizzaRouter)
-app.use("/pizzas/auth", authRouter)
+app.use("/pizzas/auth/user", authRouter)
 
 app.listen(PORT, ()=>{
     console.log("app started at ", PORT)

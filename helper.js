@@ -8,12 +8,32 @@ import bcrypt from "bcrypt"
     return await client.db("practice").collection("pizzas").insertMany(data);
 }
 
+ async function postCartItems(data) {
+    return await client.db("practice").collection("pizzas").insertOne(data);
+}
+
+ async function deleteCartItems(id) {
+    return await client.db("practice").collection("pizzas").deleteOne({id:id});
+}
+
+ async function getCartItems(id) {
+    return await client.db("practice").collection("pizzas").findOne({id:id});
+}
+
 async function createUser(data) {
     return await client.db("practice").collection("users").insertOne(data);
 }
 
 async function getByUserName(username){
     return await client.db("practice").collection("users").findOne({username:username})
+}
+
+async function updatePassword(data){
+    return await client.db("practice").collection("users").updateOne({id:data.userId, $set: data.password})
+}
+
+async function updateProduct(id,data){
+    return await client.db("practice").collection("cutompizzas").updateOne({id:id, $set:data})
 }
 
 async function genPassword(password){
@@ -25,4 +45,4 @@ async function genPassword(password){
     return hashedPassword
 }
 
-export {getPizza, postPizza, createUser, genPassword,getByUserName}
+export {getPizza, postPizza, createUser, genPassword,getByUserName,updatePassword,updateProduct,postCartItems,deleteCartItems,getCartItems}

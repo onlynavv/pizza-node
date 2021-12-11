@@ -41,7 +41,7 @@ router.route("/login")
     const userFromDB = await getByUserName(username)
 
     if(!userFromDB){
-        response.status(401).send({msg:"incorrect username"})
+        response.status(401).send({msg:"incorrect credentials"})
         return
     }
 
@@ -50,10 +50,10 @@ router.route("/login")
     const isPasswordMatch = await bcrypt.compare(password, storedPassword)
 
     if(isPasswordMatch){
-        const token = jwt.sign({id:userFromDB._id}, process.env.SECRET_KEY)
-        response.send({msg:"successfull login"})
+        const token = jwt.sign({id:userFromDB._id, username:username}, process.env.SECRET_KEY)
+        response.send({msg:"successfull login",token:token, username:username})
     }else{
-        response.status(401).send({msg: "incorrect password"})
+        response.status(401).send({msg: "incorrect credentials"})
     }
 })
 
