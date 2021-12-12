@@ -3,6 +3,10 @@ import { genPassword, createUser,getByUserName } from "./helper.js"
 const router = express.Router()
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
+import cors from "cors"
+
+const app = express()
+app.use(cors())
 
 router.route("/signup")
 .get((request, response)=>{
