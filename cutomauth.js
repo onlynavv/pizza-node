@@ -5,6 +5,7 @@ export const auth = (request, response, next) =>{
         const token = request.header("x-auth-token")
         jwt.verify(token, process.env.SECRET_KEY, (err,user)=>{
             request.user = user
+            // attaching the user to the request, so that we can use that in the next call
         })
         next()
     }catch(err){
@@ -14,20 +15,20 @@ export const auth = (request, response, next) =>{
 
 export const authAndVerifyUser = (request, response, next)=>{
     auth(request, response, ()=>{
-        if(request.user.id === request.params.id || request.user.isAdmin){
-            next()
+        if(request.user.role !== "user"){
+            response.status(401).send({msg:"user access denied"})
         }else{
-            response.status(401).send({msg:"you are not allowed"})
+            next()
         }
     })
 }
 
 export const authAndVerifyAdmin = (request, response, next)=>{
     auth(request, response, ()=>{
-        if(request.user.isAdmin){
-            next()
+        if(request.user.role !== "admin"){
+            response.status(401).send({msg:"admin access denied"})
         }else{
-            response.status(401).send({msg:"you are not allowed"})
+            next()
         }
     })
 }

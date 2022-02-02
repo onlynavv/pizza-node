@@ -15,7 +15,7 @@ router.route("/signup")
 
 router.route("/signup")
 .post(async(request, response)=>{
-    const {username, password} = request.body
+    const {username, password, role,email,firstname,lastname} = request.body
     const userFromDB = await getByUserName(username)
     console.log(userFromDB)
 
@@ -35,8 +35,13 @@ router.route("/signup")
 	}
 
     const hashedPassword = await genPassword(password)
-    const result = await createUser({username, password:hashedPassword})
-    response.send(result)
+    const result = await createUser({username, password:hashedPassword, role, email, firstname, lastname})
+    if(result.acknowledged === true){
+        response.send({msg:"user created sucessfully"})
+    }
+    else{
+        response.status(400).send({msg:"try again.."})
+    }
 })
 
 router.route("/login")
@@ -53,12 +58,12 @@ router.route("/login")
 
     const isPasswordMatch = await bcrypt.compare(password, storedPassword)
 
-    if(isPasswordMatch){
-        const token = jwt.sign({id:userFromDB._id, username:username}, process.env.SECRET_KEY)
-        response.send({msg:"successfull login",token:token, username:username})
+    if(isPasswordMatch && userFromDB.role === "user"){
+        const token = jwt.sign({id:userFromDB._id, role:userFromDB.role}, process.env.SECRET_KEY,{expiresIn:"1h"})
+        response.send({msg:"successfull login",token:token,userFromDB})
     }else{
         response.status(401).send({msg: "incorrect credentials"})
     }
 })
 
-export const authRouter = router
+export const userAuthRouter = router
